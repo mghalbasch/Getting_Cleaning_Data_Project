@@ -96,7 +96,12 @@ tidy_data <- melt(activities_data, id.vars=c("activity","subject"))
 tidy_data %>% group_by(subject,activity,variable) %>%
   summarise(average = mean(value)) %>% as.data.frame -> tidy_table
 
+# We can cast this dataset in a wide format for easier reading:
+
+tidy_table_wide <- dcast(tidy_table, subject + activity ~ variable,
+                        value.var="average")
+
 # Finally we read this table out to tidy_table.txt:
 
 con <- file("./tidy_table.txt")
-write.table(tidy_table,con,row.names=FALSE)
+write.table(tidy_table_wide,con,row.names=FALSE)
